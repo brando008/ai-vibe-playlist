@@ -1,8 +1,8 @@
 //backend/routes/spotify.js
 
 const express = require("express");
-const router = express.Router();
 const { searchSpotifyTrack } = require("../services/spotify");
+const router = express.Router();
 
 router.post("/fetch-tracks", async (req, res) => {
   const { parsedData, spotifyAccessToken } = req.body;
