@@ -16,7 +16,7 @@ app.use(express.json());
 
 // Route modules
 app.use("/auth", require("./routes/auth"));
-app.use("./api", require("./routes/parse"));
+app.use("/api", require("./routes/parse"));
 app.use("/api/spotify", require("./routes/spotify"));
 
 // Basic confirmation

@@ -21,22 +21,24 @@ function generateRandomString(length = 16) {
 router.get("/login", (req, res) => {
   const state = generateRandomString();
   const scope = "playlist-modify-public playlist-modify-private";
-  const authUrl =
-    "https://accounts.spotify.com/authorize?" +
-    querystring.stringify({
+  const authUrl = `https://accounts.spotify.com/authorize?${querystring.stringify(
+    {
       response_type: "code",
       client_id: CLIENT_ID,
-      scope,
-      redirect_uri: REDIRECT_URI,
-      state,
-    });
+      scope: scope,
+      redirect_uri: REDIRECT_URI, // this must match exactly
+      state: state,
+    }
+  )}`;
   res.redirect(authUrl);
 });
 
 // /auth/callback
 router.get("/callback", async (req, res) => {
   const code = req.query.code || null;
+
   try {
+    // 1. Exchange code for tokens
     const tokenResponse = await axios.post(
       "https://accounts.spotify.com/api/token",
       querystring.stringify({
@@ -53,7 +55,17 @@ router.get("/callback", async (req, res) => {
         },
       }
     );
-    res.json(tokenResponse.data);
+
+    // 2. Destructure from the real response
+    const { access_token, refresh_token, expires_in } = tokenResponse.data;
+
+    // 3. Redirect back to your React app with those tokens
+    const FRONTEND_URI = "http://localhost:5173";
+    res.redirect(
+      `${FRONTEND_URI}/?access_token=${access_token}` +
+        `&refresh_token=${refresh_token}` +
+        `&expires_in=${expires_in}`
+    );
   } catch (err) {
     console.error(
       "Error exchanging code for tokens:",

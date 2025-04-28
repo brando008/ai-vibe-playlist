@@ -66,7 +66,7 @@ export default function PLaylistBuilder() {
     <div className="max-w-xl mx-auto p-4">
       {!spotifyToken ? (
         <a
-          href="/auth/login"
+          href="https://127.0.0.1:8888/auth/login"
           className="block text-center bg-green-500 hover:bg-green-600 text-white py-2 rounded"
         >
           Log in with Spotify
