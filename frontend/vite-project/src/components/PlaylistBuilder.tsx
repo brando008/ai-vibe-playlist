@@ -118,46 +118,52 @@ export default function PlaylistBuilder() {
   };
 
   return (
-    <div className="max-w-xl mx-auto p-4">
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+    <div className="bg-white shadow-xl rounded-2xl p-6 w-full max-w-2xl">
       {!spotifyToken ? (
         <a
           href="https://127.0.0.1:8888/auth/login"
-          className="block text-center bg-green-500 hover:bg-green-600 text-white py-2 rounded"
+          className="block text-center bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-md transition-all duration-200"
         >
           Log in with Spotify
         </a>
       ) : (
         <>
           <textarea
-            className="w-full border p-2 mb-2 rounded"
+            className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             placeholder="Describe your vibe..."
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            rows={3}
+            rows={4}
           />
           <button
             disabled={!prompt || loading}
             onClick={handleGenerate}
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded disabled:opacity-50"
+            className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition-all duration-200 disabled:opacity-50"
           >
             {loading ? "Generating…" : "Generate Playlist"}
           </button>
         </>
       )}
 
-      {error && <p className="mt-4 text-red-600">{error}</p>}
+      {error && (
+        <p className="mt-4 text-red-600 font-medium text-center">{error}</p>
+      )}
 
       {tracks.length > 0 && (
         <>
           <ul className="mt-6 space-y-4">
             {tracks.map(({ song, artist, spotifyTrack }) => (
-              <li key={spotifyTrack.id} className="flex items-center space-x-4">
+              <li
+                key={spotifyTrack.id}
+                className="flex items-center space-x-4 border-b pb-2"
+              >
                 <img
                   src={spotifyTrack.album.images[2]?.url}
                   alt={song}
-                  className="w-12 h-12 rounded"
+                  className="w-12 h-12 rounded object-cover"
                 />
-                <div>
+                <div className="flex-1">
                   <p className="font-semibold">{song}</p>
                   <p className="text-sm text-gray-600">{artist}</p>
                 </div>
@@ -165,23 +171,24 @@ export default function PlaylistBuilder() {
                   href={spotifyTrack.external_urls.spotify}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="ml-auto text-green-500 hover:underline"
+                  className="text-green-600 hover:underline"
                 >
-                  ▶️ Play
+                  ▶️
                 </a>
               </li>
             ))}
           </ul>
 
-          {/* 4. Save to Spotify button */}
           <button
             onClick={handleSave}
-            className="mt-4 w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded"
+            className="mt-6 w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md transition-all duration-200"
           >
             Save to My Spotify
           </button>
         </>
       )}
     </div>
+  </div>
   );
+  
 }
